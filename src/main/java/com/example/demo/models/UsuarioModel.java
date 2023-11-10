@@ -11,17 +11,9 @@ public class UsuarioModel {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    private String userName;
+    private String dni;
     private String email;
     private String password;
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 
     public Long getId() {
         return id;
@@ -31,15 +23,15 @@ public class UsuarioModel {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getDni() {
+        return dni;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
-    public String getEmail() {
+        public String getEmail() {
         return email;
     }
 
@@ -47,8 +39,11 @@ public class UsuarioModel {
         this.email = email;
     }
 
-    public String getUsername() {
-        return userName;
+        public String getPassword() {
+        return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
