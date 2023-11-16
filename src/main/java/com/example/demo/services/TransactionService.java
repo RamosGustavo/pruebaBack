@@ -1,6 +1,5 @@
 package com.example.demo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.models.Transaction;
@@ -13,7 +12,6 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
 
-    @Autowired
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
@@ -27,14 +25,11 @@ public class TransactionService {
     }
 
     public Transaction saveTransaction(Transaction transaction) {
-        // Puedes realizar validaciones o lógica de negocio antes de guardar la transacción
         return transactionRepository.save(transaction);
     }
 
     public void deleteTransaction(Long id) {
         transactionRepository.deleteById(id);
     }
-
-    // Puedes agregar más métodos según tus necesidades
 }
 

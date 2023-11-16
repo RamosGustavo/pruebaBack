@@ -19,6 +19,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping
     public List<Transaction> getAllTransactions() {
         return transactionService.getAllTransactions();
@@ -26,10 +27,7 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
-        // Validaciones o lógica de negocio antes de guardar la transacción
         Transaction savedTransaction = transactionService.saveTransaction(transaction);
-
-        // Devuelve la respuesta con el código 201 y la ubicación de la nueva transacción
         return ResponseEntity.created(URI.create("/api/transactions/" + savedTransaction.getId())).body(savedTransaction);
     }
 }
