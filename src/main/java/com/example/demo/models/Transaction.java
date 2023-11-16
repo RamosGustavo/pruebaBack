@@ -1,15 +1,15 @@
 package com.example.demo.models;
 
-import java.util.Date;
+import java.sql.Date;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "transaction")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +22,9 @@ public class Transaction {
     private String estado;
     private String iconClass;
     private String stateClass;
+
+    public Transaction() {
+    }
 
     public Transaction(String icon, String name, Number value, Date symbol, String estado, String iconClass, String stateClass) {
         this.icon = icon;
@@ -41,6 +44,7 @@ public class Transaction {
         this.id = id;
     }
 
+
     public String getIcon() {
         return icon;
     }
@@ -49,14 +53,14 @@ public class Transaction {
         this.icon = icon;
     }
 
-    public String getName() {
+        public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
-
+    
     public Number getValue() {
         return value;
     }
@@ -65,7 +69,7 @@ public class Transaction {
         this.value = value;
     }
 
-    public Date getSymbol() {
+        public Date getSymbol() {
         return symbol;
     }
 
@@ -73,7 +77,7 @@ public class Transaction {
         this.symbol = symbol;
     }
 
-    public String getEstado() {
+        public String getEstado() {
         return estado;
     }
 
@@ -81,7 +85,7 @@ public class Transaction {
         this.estado = estado;
     }
 
-    public String getIconClass() {
+        public String getIconClass() {
         return iconClass;
     }
 
@@ -89,7 +93,7 @@ public class Transaction {
         this.iconClass = iconClass;
     }
 
-    public String getStateClass() {
+        public String getStateClass() {
         return stateClass;
     }
 

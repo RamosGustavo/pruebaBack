@@ -1,12 +1,12 @@
 package com.example.demo.services;
 
-import com.example.demo.models.Transaction;
-import com.example.demo.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.models.Transaction;
+import com.example.demo.repositories.TransactionRepository;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -22,25 +22,19 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public Optional<Transaction> getTransactionById(Long id) {
-        return transactionRepository.findById(id);
+    public Transaction getTransactionById(Long id) {
+        return transactionRepository.findById(id).orElse(null);
     }
 
-    public Transaction createTransaction(Transaction transaction) {
+    public Transaction saveTransaction(Transaction transaction) {
+        // Puedes realizar validaciones o lógica de negocio antes de guardar la transacción
         return transactionRepository.save(transaction);
-    }
-
-    public Transaction updateTransaction(Long id, Transaction updatedTransaction) {
-        if (transactionRepository.existsById(id)) {
-            updatedTransaction.setId(id);
-            return transactionRepository.save(updatedTransaction);
-        } else {
-            // Manejar la lógica de error, por ejemplo, lanzar una excepción
-            return null;
-        }
     }
 
     public void deleteTransaction(Long id) {
         transactionRepository.deleteById(id);
     }
+
+    // Puedes agregar más métodos según tus necesidades
 }
+

@@ -1,46 +1,35 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.Transaction;
-import com.example.demo.services.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.models.Transaction;
+import com.example.demo.services.TransactionService;
+
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/transacciones")
+@RequestMapping("/api/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
 
-    @Autowired
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
     @GetMapping
-    public List<Transaction> obtenerTransacciones() {
+    public List<Transaction> getAllTransactions() {
         return transactionService.getAllTransactions();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Transaction> obtenerTransaccionPorId(@PathVariable Long id) {
-        return transactionService.getTransactionById(id);
-    }
-
     @PostMapping
-    public Transaction crearTransaccion(@RequestBody Transaction transaction) {
-        return transactionService.createTransaction(transaction);
-    }
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
+        // Validaciones o lógica de negocio antes de guardar la transacción
+        Transaction savedTransaction = transactionService.saveTransaction(transaction);
 
-    @PatchMapping("/{id}")
-    public Transaction actualizarTransaccion(@PathVariable Long id, @RequestBody Transaction updatedTransaction) {
-        return transactionService.updateTransaction(id, updatedTransaction);
-    }
-
-    @DeleteMapping("/{id}")
-    public void eliminarTransaccion(@PathVariable Long id) {
-        transactionService.deleteTransaction(id);
+        // Devuelve la respuesta con el código 201 y la ubicación de la nueva transacción
+        return ResponseEntity.created(URI.create("/api/transactions/" + savedTransaction.getId())).body(savedTransaction);
     }
 }
