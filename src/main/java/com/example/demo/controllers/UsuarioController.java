@@ -1,59 +1,79 @@
 package com.example.demo.controllers;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
+import com.example.demo.models.ApiResponse;
 import com.example.demo.models.UsuarioModel;
-import com.example.demo.repositories.UsuarioRepository;
+import com.example.demo.services.UsuarioService;
+import com.google.gson.Gson;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UsuarioController {
-
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    UsuarioService usuarioService;
 
-    @GetMapping
-    public ResponseEntity<List<UsuarioModel>> getAllUsers() {
-        List<UsuarioModel> users = usuarioRepository.findAll();
-        return ResponseEntity.ok(users);
+    @PostMapping(produces = "application/json")
+    public ResponseEntity<String> loginUser(@RequestBody UsuarioModel usuario) {
+        String numero = usuario.getNumero();
+        String password = usuario.getPassword();
+
+        UsuarioModel usuarioExistente = usuarioService.findByNumero(numero);
+
+        if (usuarioExistente == null) {
+            ApiResponse response = new ApiResponse("Datos incorrectos.", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Gson().toJson(response));
+        }
+
+        if (!usuarioExistente.getPassword().equals(password)) {
+            ApiResponse response = new ApiResponse("Datos incorrectos.",
+                    HttpStatus.UNAUTHORIZED.value());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Gson().toJson(response));
+        }
+
+        ApiResponse response = new ApiResponse("Inicio de sesión exitoso", HttpStatus.OK.value());
+        return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(response));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioModel> getUserById(@PathVariable Long id) {
-        return usuarioRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UsuarioModel usuario) {
+        if (!isValidEmail(usuario.getNumero())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del número no es válido.");
+        }
+
+        if (usuarioService.findByNumero(usuario.getNumero()) != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El número ya está en uso.");
+        }
+
+        usuarioService.guardarUsuario(usuario);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado con éxito.");
     }
 
-    @PostMapping
-    public ResponseEntity<UsuarioModel> createUser(@RequestBody UsuarioModel usuario) {
-        UsuarioModel newUser = usuarioRepository.save(usuario);
-        return ResponseEntity.ok(newUser);
+    private boolean isValidEmail(String email) {
+        return true;
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UsuarioModel> updateUser(@PathVariable Long id, @RequestBody UsuarioModel updatedUser) {
-        return usuarioRepository.findById(id)
-                .map(existingUser -> {
-                    existingUser.setDni(updatedUser.getDni());
-                    existingUser.setEmail(updatedUser.getEmail());
-                    existingUser.setPassword(updatedUser.getPassword());
-                    UsuarioModel savedUser = usuarioRepository.save(existingUser);
-                    return ResponseEntity.ok(savedUser);
-                })
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping(path = "/{id}")
+    public Optional<UsuarioModel> obtenerUsuarioPorId(@PathVariable Long id) {
+        return this.usuarioService.obtenerPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        return usuarioRepository.findById(id)
-                .map(existingUser -> {
-                    usuarioRepository.delete(existingUser);
-                    return ResponseEntity.ok().<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<String> eliminarPorId(@PathVariable Long id) {
+        boolean ok = this.usuarioService.eliminarUsuario(id);
+        if (ok) {
+            ApiResponse response = new ApiResponse("Usuario eliminado con éxito", HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(response));
+        } else {
+            ApiResponse response = new ApiResponse("No se pudo eliminar el usuario.", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Gson().toJson(response));
+        }
     }
 }
