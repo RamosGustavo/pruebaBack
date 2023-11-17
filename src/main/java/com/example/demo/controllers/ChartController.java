@@ -20,14 +20,12 @@ public class ChartController {
     @Autowired
     private ChartDataService chartDataService;
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/chart-data")
     public ResponseEntity<List<ChartDataEntity>> getChartData() {
         List<ChartDataEntity> chartData = chartDataService.getAllChartData();
         return ResponseEntity.ok(chartData);
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping("/chart-data")
     public ResponseEntity<ChartDataEntity> createChartData(@RequestBody ChartDataEntity chartData) {
         ChartDataEntity createdChartData = chartDataService.createChartData(chartData);

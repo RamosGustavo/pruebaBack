@@ -19,7 +19,6 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping
     public List<Transaction> getAllTransactions() {
         return transactionService.getAllTransactions();
