@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/cards")
 public class CardController {
-
-    @Autowired
     private CardService cardService;
+
+    public CardController(CardService cardService) {
+        this.cardService = cardService;
+    }
 
     @GetMapping
     public List<Card> getAllCards() {

@@ -19,8 +19,11 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/chart-data")
 public class ChartController {
-    @Autowired
     private ChartDataService chartDataService;
+
+    public ChartController(ChartDataService chartDataService) {
+        this.chartDataService = chartDataService;
+    }
 
     @GetMapping
     public ResponseEntity<List<ChartDataEntity>> getChartData() {
