@@ -1,9 +1,9 @@
 package com.example.demo.controllers;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import com.example.demo.models.ApiResponse;
+import com.example.demo.models.UsuarioDTO;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.services.UsuarioService;
 import com.google.gson.Gson;
@@ -21,59 +21,47 @@ public class UsuarioController {
 
     @PostMapping(produces = "application/json")
     public ResponseEntity<String> loginUser(@RequestBody UsuarioModel usuario) {
-        String numero = usuario.getNumero();
-        String password = usuario.getPassword();
-
-        UsuarioModel usuarioExistente = usuarioService.findByNumero(numero);
-
-        if (usuarioExistente == null) {
-            ApiResponse response = new ApiResponse("Datos incorrectos.", HttpStatus.NOT_FOUND.value());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Gson().toJson(response));
+        if (!isValidEmail(usuario.getNumero())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new Gson().toJson(
+                            new ApiResponse("El formato del número no es válido.", HttpStatus.BAD_REQUEST.value())));
         }
 
-        if (!usuarioExistente.getPassword().equals(password)) {
-            ApiResponse response = new ApiResponse("Datos incorrectos.",
-                    HttpStatus.UNAUTHORIZED.value());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Gson().toJson(response));
-        }
-
-        ApiResponse response = new ApiResponse("Inicio de sesión exitoso", HttpStatus.OK.value());
-        return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(response));
+        return usuarioService.loginUsuario(usuario);
     }
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UsuarioModel usuario) {
         if (!isValidEmail(usuario.getNumero())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del número no es válido.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new Gson().toJson(new ApiResponse("El formato del número no es válido.", HttpStatus.BAD_REQUEST.value())));
         }
 
-        if (usuarioService.findByNumero(usuario.getNumero()) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El número ya está en uso.");
-        }
-
-        usuarioService.guardarUsuario(usuario);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado con éxito.");
+        return usuarioService.registerUsuario(usuario);
     }
 
     private boolean isValidEmail(String email) {
-        return true;
+        String dni = extractDNI(email);
+        return usuarioService.isValidDNI(dni);
+    }
+
+    private String extractDNI(String email) {
+        return email.substring(0, 8);
     }
 
     @GetMapping(path = "/{id}")
-    public Optional<UsuarioModel> obtenerUsuarioPorId(@PathVariable Long id) {
-        return this.usuarioService.obtenerPorId(id);
+    public ResponseEntity<UsuarioDTO> obtenerUsuarioPorId(@PathVariable Long id) {
+        Optional<UsuarioModel> usuarioOptional = this.usuarioService.obtenerPorId(id);
+        return usuarioOptional.map(usuario -> ResponseEntity.ok(usuarioService.convertirAUsuarioDTO(usuario)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> eliminarPorId(@PathVariable Long id) {
-        boolean ok = this.usuarioService.eliminarUsuario(id);
-        if (ok) {
-            ApiResponse response = new ApiResponse("Usuario eliminado con éxito", HttpStatus.OK.value());
-            return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(response));
-        } else {
-            ApiResponse response = new ApiResponse("No se pudo eliminar el usuario.", HttpStatus.NOT_FOUND.value());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Gson().toJson(response));
-        }
+        boolean eliminacionExitosa = this.usuarioService.eliminarUsuario(id);
+        ApiResponse response = eliminacionExitosa
+                ? new ApiResponse("Usuario eliminado con éxito", HttpStatus.OK.value())
+                : new ApiResponse("No se pudo eliminar el usuario.", HttpStatus.NOT_FOUND.value());
+        return ResponseEntity.status(response.getStatus()).body(new Gson().toJson(response));
     }
 }

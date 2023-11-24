@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,10 @@ import java.util.List;
 @RequestMapping("/api/menu")
 public class MenuController {
 
-    @Autowired
     private MenuService menuService;
+    public MenuController(MenuService menuService) {
+        this.menuService = menuService;
+    }
 
     @GetMapping
     public List<MenuItem> getMenuItems() {

@@ -46,5 +46,4 @@ public class UsuarioModel {
     public void setId(Long id) {
         this.id = id;
     }
-
 }
