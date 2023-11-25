@@ -1,25 +1,12 @@
-package com.example.demo.models;
+package com.example.demo.DTO;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "saldo")
-public class Card {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CardResponseDTO {
     private Long id;
-
-    @Column(unique = true, nullable = false, length = 16)
     private String cardNumber;
-    private double balance;
     private String cardholderName;
     private String validUntil;
+
+    private Double balance;
 
     public Long getId() {
         return id;
@@ -37,14 +24,6 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
     public String getCardholderName() {
         return cardholderName;
     }
@@ -59,5 +38,13 @@ public class Card {
 
     public void setValidUntil(String validUntil) {
         this.validUntil = validUntil;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 }

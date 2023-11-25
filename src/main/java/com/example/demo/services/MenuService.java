@@ -1,6 +1,5 @@
 package com.example.demo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.models.MenuItem;
@@ -11,8 +10,11 @@ import java.util.List;
 @Service
 public class MenuService {
 
-    @Autowired
     private MenuItemRepository menuItemRepository;
+
+    public MenuService(MenuItemRepository menuItemRepository) {
+        this.menuItemRepository = menuItemRepository;
+    }
 
     public List<MenuItem> getMenuItems() {
         return menuItemRepository.findAll();

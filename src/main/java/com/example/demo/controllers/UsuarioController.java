@@ -2,13 +2,12 @@ package com.example.demo.controllers;
 
 import java.util.Optional;
 
+import com.example.demo.DTO.UsuarioDTO;
 import com.example.demo.models.ApiResponse;
-import com.example.demo.models.UsuarioDTO;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.services.UsuarioService;
 import com.google.gson.Gson;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 public class UsuarioController {
-    @Autowired
     UsuarioService usuarioService;
+
+        public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @PostMapping(produces = "application/json")
     public ResponseEntity<String> loginUser(@RequestBody UsuarioModel usuario) {

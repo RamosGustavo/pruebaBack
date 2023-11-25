@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "transaction")
@@ -17,6 +19,8 @@ public class Transaction {
 
     private String icon;
     private String name;
+    @NotNull
+    @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "El valor debe ser numérico")
     private Number value;
     private Date symbol;
     private String estado;
@@ -26,7 +30,8 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String icon, String name, Number value, Date symbol, String estado, String iconClass, String stateClass) {
+    public Transaction(String icon, String name, Number value, Date symbol, String estado, String iconClass,
+            String stateClass) {
         this.icon = icon;
         this.name = name;
         this.value = value;
@@ -36,14 +41,13 @@ public class Transaction {
         this.stateClass = stateClass;
     }
 
-        public Long getId() {
+    public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public String getIcon() {
         return icon;
@@ -53,14 +57,14 @@ public class Transaction {
         this.icon = icon;
     }
 
-        public String getName() {
+    public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public Number getValue() {
         return value;
     }
@@ -69,7 +73,7 @@ public class Transaction {
         this.value = value;
     }
 
-        public Date getSymbol() {
+    public Date getSymbol() {
         return symbol;
     }
 
@@ -77,7 +81,7 @@ public class Transaction {
         this.symbol = symbol;
     }
 
-        public String getEstado() {
+    public String getEstado() {
         return estado;
     }
 
@@ -85,7 +89,7 @@ public class Transaction {
         this.estado = estado;
     }
 
-        public String getIconClass() {
+    public String getIconClass() {
         return iconClass;
     }
 
@@ -93,7 +97,7 @@ public class Transaction {
         this.iconClass = iconClass;
     }
 
-        public String getStateClass() {
+    public String getStateClass() {
         return stateClass;
     }
 
@@ -101,4 +105,3 @@ public class Transaction {
         this.stateClass = stateClass;
     }
 }
-

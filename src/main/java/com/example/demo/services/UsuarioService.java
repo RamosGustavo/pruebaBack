@@ -3,8 +3,8 @@ package com.example.demo.services;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.example.demo.DTO.UsuarioDTO;
 import com.example.demo.models.ApiResponse;
-import com.example.demo.models.UsuarioDTO;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.UsuarioRepository;
 import com.google.gson.Gson;
