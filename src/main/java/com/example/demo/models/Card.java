@@ -43,7 +43,7 @@ public class Card {
         return balance;
     }
 
-   public void setBalance(BigDecimal balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,5 +35,10 @@ public class ChartController {
     public ResponseEntity<ChartDataEntity> createChartData(@RequestBody @Valid ChartDataEntity chartData) {
         ChartDataEntity createdChartData = chartDataService.createChartData(chartData);
         return ResponseEntity.status(HttpStatus.OK).body(createdChartData);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en la solicitud");
     }
 }

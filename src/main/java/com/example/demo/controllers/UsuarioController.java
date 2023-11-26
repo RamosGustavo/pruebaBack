@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
     UsuarioService usuarioService;
 
-        public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
@@ -28,7 +28,6 @@ public class UsuarioController {
                     .body(new Gson().toJson(
                             new ApiResponse("El formato del número no es válido.", HttpStatus.BAD_REQUEST.value())));
         }
-
         return usuarioService.loginUsuario(usuario);
     }
 
@@ -36,9 +35,9 @@ public class UsuarioController {
     public ResponseEntity<String> registerUser(@RequestBody UsuarioModel usuario) {
         if (!isValidEmail(usuario.getNumero())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new Gson().toJson(new ApiResponse("El formato del número no es válido.", HttpStatus.BAD_REQUEST.value())));
+                    .body(new Gson().toJson(
+                            new ApiResponse("El formato del número no es válido.", HttpStatus.BAD_REQUEST.value())));
         }
-
         return usuarioService.registerUsuario(usuario);
     }
 

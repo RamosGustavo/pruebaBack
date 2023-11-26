@@ -6,7 +6,6 @@ import com.example.demo.DTO.UpdateBalanceDTO;
 import com.example.demo.models.Card;
 import com.example.demo.repositories.CardRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
