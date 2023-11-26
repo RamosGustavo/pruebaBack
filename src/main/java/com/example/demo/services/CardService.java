@@ -38,12 +38,8 @@ public class CardService {
     public Card updateBalance(UpdateBalanceDTO updateBalanceDTO) {
         Card card = cardRepository.findById(updateBalanceDTO.getCardId())
                 .orElseThrow(() -> new EntityNotFoundException("Tarjeta no encontrada"));
-        try {
-            double newBalance = Double.parseDouble(updateBalanceDTO.getNewBalance());
-            card.setBalance(newBalance);
-            return cardRepository.save(card);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("El formato del nuevo saldo no es válido");
-        }
+
+        card.setBalance(updateBalanceDTO.getNewBalance());
+        return cardRepository.save(card);
     }
 }

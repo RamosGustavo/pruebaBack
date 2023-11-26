@@ -2,7 +2,7 @@ package com.example.demo.DTO;
 
 public class UpdateBalanceDTO {
     private Long cardId;
-    private String newBalance;
+    private double newBalance;
 
     public Long getCardId() {
         return cardId;
@@ -12,11 +12,11 @@ public class UpdateBalanceDTO {
         this.cardId = cardId;
     }
 
-    public String getNewBalance() {
+    public double getNewBalance() {
         return newBalance;
     }
 
-    public void setNewBalance(String newBalance) {
+    public void setNewBalance(double newBalance) {
         this.newBalance = newBalance;
     }
 }
