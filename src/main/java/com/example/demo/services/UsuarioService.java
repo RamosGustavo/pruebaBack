@@ -68,7 +68,6 @@ public class UsuarioService {
 
     public ResponseEntity<String> registerUsuario(UsuarioModel usuario) {
         try {
-            // Lógica específica de la base de datos
             if (findByNumero(usuario.getNumero()) != null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new Gson()
