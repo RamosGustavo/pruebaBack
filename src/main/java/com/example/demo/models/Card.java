@@ -1,5 +1,7 @@
 package com.example.demo.models;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +19,7 @@ public class Card {
 
     @Column(unique = true, nullable = false, length = 16)
     private String cardNumber;
-    private double balance;
+    private BigDecimal balance;
     private String cardholderName;
     private String validUntil;
 
@@ -37,11 +39,11 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+   public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

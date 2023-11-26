@@ -1,8 +1,10 @@
 package com.example.demo.DTO;
 
+import java.math.BigDecimal;
+
 public class UpdateBalanceDTO {
     private Long cardId;
-    private double newBalance;
+    private BigDecimal newBalance;
 
     public Long getCardId() {
         return cardId;
@@ -12,11 +14,11 @@ public class UpdateBalanceDTO {
         this.cardId = cardId;
     }
 
-    public double getNewBalance() {
+    public BigDecimal getNewBalance() {
         return newBalance;
     }
 
-    public void setNewBalance(double newBalance) {
+    public void setNewBalance(BigDecimal newBalance) {
         this.newBalance = newBalance;
     }
 }

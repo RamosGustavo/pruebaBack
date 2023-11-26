@@ -35,5 +35,4 @@ public class ChartController {
         ChartDataEntity createdChartData = chartDataService.createChartData(chartData);
         return ResponseEntity.status(HttpStatus.OK).body(createdChartData);
     }
-
 }

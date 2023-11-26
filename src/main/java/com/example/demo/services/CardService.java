@@ -6,6 +6,7 @@ import com.example.demo.DTO.UpdateBalanceDTO;
 import com.example.demo.models.Card;
 import com.example.demo.repositories.CardRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -38,7 +39,6 @@ public class CardService {
     public Card updateBalance(UpdateBalanceDTO updateBalanceDTO) {
         Card card = cardRepository.findById(updateBalanceDTO.getCardId())
                 .orElseThrow(() -> new EntityNotFoundException("Tarjeta no encontrada"));
-
         card.setBalance(updateBalanceDTO.getNewBalance());
         return cardRepository.save(card);
     }
