@@ -49,19 +49,15 @@ public class UsuarioService {
     public ResponseEntity<String> loginUsuario(UsuarioModel usuario) {
         String numero = usuario.getNumero();
         String password = usuario.getPassword();
-
         UsuarioModel usuarioExistente = findByNumero(numero);
-
         if (usuarioExistente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Gson().toJson(new ApiResponse("Datos incorrectos.", HttpStatus.NOT_FOUND.value())));
         }
-
         if (!usuarioExistente.getPassword().equals(password)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new Gson().toJson(new ApiResponse("Datos incorrectos.", HttpStatus.UNAUTHORIZED.value())));
         }
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new Gson().toJson(new ApiResponse("Inicio de sesión exitoso", HttpStatus.OK.value())));
     }
@@ -73,9 +69,13 @@ public class UsuarioService {
                         .body(new Gson()
                                 .toJson(new ApiResponse("El número ya está en uso.", HttpStatus.BAD_REQUEST.value())));
             }
-
+            if (!isValidNumero(usuario.getNumero())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new Gson().toJson(
+                                new ApiResponse("El número debe tener exactamente 8 dígitos.",
+                                        HttpStatus.BAD_REQUEST.value())));
+            }
             guardarUsuario(usuario);
-
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new Gson()
                             .toJson(new ApiResponse("Usuario registrado con éxito", HttpStatus.CREATED.value())));
@@ -84,6 +84,10 @@ public class UsuarioService {
                     .body(new Gson().toJson(
                             new ApiResponse("Error interno del servidor.", HttpStatus.INTERNAL_SERVER_ERROR.value())));
         }
+    }
+
+    private boolean isValidNumero(String numero) {
+        return numero != null && numero.matches("\\d{8}");
     }
 
     public UsuarioModel findByNumero(String email) {
